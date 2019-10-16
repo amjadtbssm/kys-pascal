@@ -1,0 +1,1 @@
+wget -N http://kys-jedisdl.googlecode.com/svn/trunk/kys.exe
