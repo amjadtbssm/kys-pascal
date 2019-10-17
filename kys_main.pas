@@ -23,8 +23,8 @@
 }
 
 {
- 任何人获得这份代码之后, 均可以自由增删功能, 重新
- 编译, 或译为其他语言. 但请保留本段文字.
+  Anyone who gets this code can freely add and delete functions,
+  Compile, or translate to other languages. But please keep this paragraph.
 }
 
 interface
@@ -51,13 +51,13 @@ uses
   iniFiles,
   bass;
 
-//程序重要子程
+//Program important subroutine
 procedure Run; stdcall; export;
 procedure Quit;
 procedure SetMODVersion;
 procedure ReadFiles;
 
-//游戏开始画面, 行走等
+//Game start screen, walking, etc.
 procedure Start;
 procedure StartAmi;
 function InitialRole: boolean;
@@ -77,7 +77,7 @@ function CanWalkInScence(x1, y1, x, y: integer): boolean; overload;
 function CheckEvent1: boolean;
 procedure CheckEvent3;
 
-//选单子程
+//Menu subroutine
 function CommonMenu(x, y, w, max: integer; menuString: array of WideString): integer; overload;
 function CommonMenu(x, y, w, max, default: integer; menuString: array of WideString): integer; overload;
 function CommonMenu(x, y, w, max: integer; menuString, menuEngString: array of WideString): integer; overload;
@@ -117,15 +117,15 @@ function MenuLoadAtBeginning: integer;
 procedure MenuSave;
 procedure MenuQuit;
 
-//医疗, 解毒, 使用物品的效果等
+//Medical, detoxification, effect of using items, etc.
 function EffectMedcine(role1, role2: integer): integer;
 function EffectMedPoison(role1, role2: integer): integer;
 function EatOneItem(rnum, inum: integer; times: integer = 1; display: integer = 1): integer;
 
-//事件系统
+//Event system
 procedure CallEvent(num: integer);
 
-//云的初始化和再次出现
+//Cloud initialization and reappear
 procedure CloudCreate(num: integer);
 procedure CloudCreateOnSide(num: integer);
 
@@ -143,7 +143,7 @@ uses
   kys_battle,
   kys_draw;
 
-//初始化字体, 音效, 视频, 启动游戏
+//Initialize font, sound effects, video, start game
 
 procedure Run;
 var
@@ -176,7 +176,8 @@ begin
   font := TTF_OpenFont(PAnsiChar(AppPath + CHINESE_FONT), CHINESE_FONT_SIZE);
   engfont := TTF_OpenFont(PAnsiChar(AppPath + ENGLISH_FONT), ENGLISH_FONT_SIZE);
 
-  //此处测试中文字体的空格宽度
+  //Test the space width of Chinese fonts here
+  //To Do... Remove Dependency for chinese fonts and use english fonts instead
   Text := TTF_RenderUNICODE_solid(font, @word[0], tempcolor);
   //writeln(SDL_geterror());
   //writeln(text.w);
@@ -184,7 +185,7 @@ begin
   //CHNFONT_SPACEWIDTH := 10;
   SDL_FreeSurface(Text);
 
-  //初始化音频系统
+  //Initialize the audio system
   //SDL_Init(SDL_INIT_AUDIO);
   //Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 16384);
   SoundFlag := 0;
@@ -192,7 +193,7 @@ begin
     SoundFlag := BASS_DEVICE_3D or SoundFlag;
   BASS_Init(-1, 22050, SoundFlag, 0, nil);
 
-  //初始化视频系统
+  //Initialize the video system
   Randomize;
   //SDL_Init(SDL_INIT_VIDEO);
   if (SDL_Init(SDL_INIT_VIDEO) < 0) then
@@ -204,7 +205,7 @@ begin
 
   //SDL_WM_SetIcon(IMG_Load(PAnsiChar(AppPath + 'resource/icon.png')), 0);
 
-  ScreenFlag := SDL_WINDOW_FULLSCREEN; //was SDL_WINDOW_RESIZABLE
+  ScreenFlag := SDL_WINDOW_RESIZABLE; //SDL_WINDOW_FULLSCREEN; //was SDL_WINDOW_RESIZABLE
   {SDL_HWSURFACE or SDL_HWACCEL or SDL_ANYFORMAT or SDL_ASYNCBLIT or SDL_FULLSCREEN};
   {if GLHR = 1 then
   begin
@@ -286,7 +287,7 @@ begin
 
 end;
 
-//关闭所有已打开的资源, 退出
+//Close all open resources, exit
 
 procedure Quit;
 begin
@@ -318,15 +319,16 @@ begin
   OpenPicPosition.y := CENTER_Y - 220;
   TitlePosition.x := OpenPicPosition.x + 275;
   TitlePosition.y := OpenPicPosition.y + 125;
-  //0-原版,
-  //11-小猪闯江湖, 12-苍龙逐日, 13-金庸水浒传(未包含)
-  //21-天书奇侠, 22-菠萝三国(含资料片), 23-笑梦游记, 24-前传(未包含)
-  //31-再战江湖,
-  //41-PTT
-  //51-魏征
-  //62-红颜录解密
-  //71-天书劫
-  //81-自然与祥和
+    //0-original,
+    //11-Little pigs licking the river, 12-Canglong day by day, 13-Jin Yongshui rumor (not included)
+    //21- Heavenly book
+   //22- Pineapple Three Kingdoms (with information piece), 23- Smile Dream Travel, 24-Prequel (not included)
+    //31- fighting the rivers and lakes again,
+    //41-PTT
+   //51-Wei Zheng
+    //62-Red Book Decryption
+    //71-day book robbery
+ //81-natural and peaceful
 
   case MODVersion of
     0:
@@ -434,7 +436,7 @@ begin
 end;
 
 
-//读取必须的文件
+//Read the necessary files
 
 procedure ReadFiles;
 var
@@ -561,7 +563,7 @@ begin
 end;
 
 //Main game.
-//显示开头画面
+//Show the opening screen
 
 procedure Start;
 var
@@ -607,19 +609,19 @@ begin
   DrawTitlePic(menu + 1, x, y + menu * 20);
   SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
 
-  //事件等待
+  //Event waiting
   Selected := False;
   while (SDL_WaitEvent(@event) >= 0) do
   begin
     CheckBasicEvent;
-    case event.type_ of //键盘事件
+    case event.type_ of //Keyboard event
       SDL_KEYUP:
       begin
         if ((event.key.keysym.sym = SDLK_RETURN) or (event.key.keysym.sym = SDLK_SPACE)) then
         begin
           Selected := True;
         end;
-        //按下方向键上
+        //Press the arrow keys
         if event.key.keysym.sym = SDLK_UP then
         begin
           menu := menu - 1;
@@ -629,7 +631,7 @@ begin
           DrawTitlePic(menu + 1, x, y + menu * 20);
           SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
         end;
-        //按下方向键下
+        //Press the down arrow key
         if event.key.keysym.sym = SDLK_DOWN then
         begin
           menu := menu + 1;
@@ -640,7 +642,7 @@ begin
           SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
         end;
       end;
-      //按下鼠标(UP表示抬起按键才执行)
+      //Press the mouse (UP means to lift the button to execute)
       SDL_MOUSEBUTTONUP:
       begin
         if (event.button.button = SDL_BUTTON_LEFT) and (round(event.button.x / (RESOLUTIONX / screen.w)) > x) and
@@ -651,7 +653,7 @@ begin
           Selected := True;
         end;
       end;
-      //鼠标移动
+      //Mouse movement
       SDL_MOUSEMOTION:
       begin
         if (round(event.button.x / (RESOLUTIONX / screen.w)) > x) and
@@ -713,7 +715,7 @@ begin
 
 end;
 
-//开头字幕
+//Opening caption
 
 procedure StartAmi;
 var
@@ -761,7 +763,7 @@ begin
 
 end;
 
-//初始化主角属性
+//Initialize the protagonist attribute
 
 function InitialRole: boolean;
 var
@@ -787,19 +789,20 @@ var
 {$endif}
 begin
   LoadR(0);
-  //显示输入姓名的对话框
+  //Show dialog for entering a name
   //form1.ShowModal;
   //str := form1.edit1.text;
-  str1 := '請以繁體中文輸入主角之姓名，選定屬性後按Enter, Esc或滑鼠按鍵     ';
-  //name := InputBox('Enter name', str1, '我是主角');
+  //To Do ... English Name
+  str1 := 'Please enter the name of the protagonist in Traditional Chinese, select the property and press Enter, Esc or Mouse button';
+  //name := InputBox('Enter name', str1, 'I am the protagonist');
   where := 3;
   Redraw;
-  tempname := '我是主角';
-  homename := '主角的家';
+  tempname := 'I am the protagonist';
+  homename := 'Protagonists home';
 {$ifdef android}
   {ShowStatus(0);
   UpdateAllScreen;
-  str0 := '點擊一下開始選屬性！';
+  str0 := 'Click to start selecting properties!';
   DrawTextWithRect(@str0[1], 175, CENTER_Y + 171, 10, ColColor($64), ColColor($66));
   env := SDL_AndroidGetJNIEnv();
   activity := SDL_AndroidGetActivity();
@@ -828,12 +831,12 @@ begin
 {$IFDEF fpc}
     str1 := UTF8ToCP950(Name);
     if (length(str1) in [1..7]) and (Name <> ' ') then
-      homename := Name + '居';
+      homename := Name + 'Living';
     str2 := UTF8ToCP950(homename);
 {$ELSE}
     str1 := UnicodeToBig5(@Name[1]);
     if (length(str1[1]) in [1..7]) and (Name <> ' ') then
-      homename := Name + '居';
+      homename := Name + 'Living';
     str2 := UnicodeToBig5(@homename[1]);
 {$ENDIF}
     p0 := @Rrole[0].Name;
@@ -859,7 +862,7 @@ begin
 
     Redraw;
 
-    str := ('資質');
+    str := ('Qualification');
     repeat
       if MODVersion <> 21 then
       begin
@@ -909,9 +912,11 @@ begin
       i := WaitAnyKey;
     until (i = SDLK_ESCAPE) or (i = SDLK_RETURN);
 
+    //To Do... instead of hardcoded characters use INI file to store and read character data
+
     if MODVersion = 0 then
     begin
-      if Name = 'TXDX尊使' then
+      if Name = 'TXDX Ambassador' then
       begin
         Rrole[0].MaxHP := 50;
         Rrole[0].CurrentHP := 50;
@@ -951,7 +956,7 @@ begin
 
     if MODVersion = 22 then
     begin
-      if Name = 'k小邪' then
+      if Name = 'K Xiaoxie' then
       begin
         Rrole[0].MaxHP := 50;
         Rrole[0].CurrentHP := 50;
@@ -983,7 +988,7 @@ begin
         Rrole[0].AttPoi := 0;
       end;
 
-      if Name = '龍吟星落' then
+      if Name = 'Dragon star' then
       begin
         Rrole[0].MaxHP := 150;
         Rrole[0].CurrentHP := 120;
@@ -1015,7 +1020,7 @@ begin
         Rrole[0].Magic[4] := 172;
       end;
 
-      if Name = '小隨' then
+      if Name = 'Xiaosui' then
       begin
         Rrole[0].MaxHP := 150;
         Rrole[0].CurrentHP := 120;
@@ -1046,7 +1051,7 @@ begin
         Rrole[0].AttTwice := 1;
       end;
 
-      if Name = '破大俠' then
+      if Name = 'Broken Hero' then
       begin
         Rrole[0].MaxHP := 1150;
         Rrole[0].CurrentHP := 1120;
@@ -1081,7 +1086,7 @@ begin
         //rrole[0].AttTwice := 1;
       end;
 
-      if Name = '鳳凰' then
+      if Name = 'Phoenix' then
       begin
         Rrole[0].MaxHP := 250;
         Rrole[0].CurrentHP := 50;
@@ -1118,7 +1123,7 @@ begin
 
     if MODVersion = 23 then
     begin
-      if Name = '小小豬' then
+      if Name = 'Little pig' then
       begin
         Rrole[0].MaxHP := 10;
         Rrole[0].CurrentHP := 10;
@@ -1155,7 +1160,7 @@ begin
         Rrole[0].AttPoi := 0;
       end;
 
-      if Name = 'k小邪' then
+      if Name = 'K Xiaoxie' then
       begin
         Rrole[0].MaxHP := 150;
         Rrole[0].CurrentHP := 120;
@@ -1198,7 +1203,7 @@ begin
         end;
       end;
 
-      if Name = '南宮夢' then
+      if Name = 'Nangong Dream' then
       begin
         Rrole[0].MaxHP := 500;
         Rrole[0].CurrentHP := 500;
@@ -1231,7 +1236,7 @@ begin
         Rmagic[37].AttDistance[9] := 4;
       end;
 
-      if Name = '游客' then
+      if Name = 'Tourist' then
       begin
         Rrole[0].MaxHP := 50;
         Rrole[0].CurrentHP := 50;
@@ -1262,7 +1267,7 @@ begin
         Rrole[0].AttTwice := 1;
       end;
 
-      if Name = '飛蟲王' then
+      if Name = 'Flying insect king' then
       begin
         Rrole[0].MaxHP := 50;
         Rrole[0].CurrentHP := 50;
@@ -1293,7 +1298,7 @@ begin
         Rrole[0].AttPoi := 95;
       end;
 
-      if Name = '破劍式' then
+      if Name = 'Broken sword' then
       begin
         Rrole[0].MaxHP := 499;
         Rrole[0].CurrentHP := 499;
@@ -1364,7 +1369,7 @@ begin
         Rrole[0].Magic[2] := 17;
       end;
 
-      if Name = '鳳凰ice' then
+      if Name = 'Phoenix ice' then
       begin
         Rrole[0].MPType := 2;
         Rrole[0].IncLife := 10;
@@ -1388,7 +1393,7 @@ begin
 
     if MODVersion = 11 then
     begin
-      if Name = '小小豬' then
+      if Name = 'Little pig' then
       begin
         Rrole[0].MaxHP := 50;
         Rrole[0].CurrentHP := 50;
@@ -1425,7 +1430,7 @@ begin
 
       end;
 
-      if Name = '晴空飛雪' then
+      if Name = 'Clear skies' then
       begin
         Rrole[0].MaxHP := 50;
         Rrole[0].CurrentHP := 50;
@@ -1465,7 +1470,7 @@ begin
 
     if MODVersion = 12 then
     begin
-      if Name = '小小豬' then
+      if Name = 'Little pig' then
       begin
         Rrole[0].MaxHP := 50;
         Rrole[0].CurrentHP := 50;
@@ -1488,7 +1493,7 @@ begin
 
         Rrole[0].Aptitude := 100;
       end;
-      if Name = '見賢思齊' then
+      if Name = 'See the sage' then
       begin
         Rrole[0].MaxHP := 50;
         Rrole[0].CurrentHP := 50;
@@ -1515,7 +1520,7 @@ begin
 
     if MODVersion = 31 then
     begin
-      if Name = '南宮夢' then
+      if Name = 'Nangong Dream' then
       begin
         Rrole[0].MaxHP := 50;
         Rrole[0].CurrentHP := 50;
@@ -1570,7 +1575,7 @@ begin
 
     if MODVersion = 21 then
     begin
-      if (Name = '古天奇') or (Name = '青狼火花') then
+      if (Name = 'Gu Tianqi') or (Name = 'Green wolf spark') then
       begin
         Rrole[0].MPType := 2;
         Rrole[0].IncLife := 20;
@@ -1591,7 +1596,7 @@ begin
 
 end;
 
-//读入存档, 如为0则读入起始存档
+//Read in the archive, if it is 0, read in the start archive
 
 procedure LoadR(num: integer);
 var
@@ -1647,7 +1652,7 @@ begin
   FileClose(idx);
   FileClose(grp);
 
-  //初始化入口
+  //Initialize the entry
 
   ScenceAmount := (MagicOffset - ScenceOffset) div 52;
   for i := 0 to ScenceAmount - 1 do
@@ -1686,7 +1691,7 @@ begin
 
 end;
 
-//存档
+//Archive
 
 procedure SaveR(num: integer);
 var
@@ -1757,7 +1762,7 @@ begin
 
 end;
 
-//等待任意按键
+//Waiting for any button
 
 function WaitAnyKey: integer;
 var
@@ -1809,7 +1814,7 @@ begin
   event.button.button := 0;
 end;
 
-//于主地图行走
+//Walking on the main map
 
 procedure Walk;
 var
@@ -1841,19 +1846,19 @@ begin
   stillcount := 0;
 
   //ExecScript('test.txt');
-  //事件轮询(并非等待)
+  //Event polling (not waiting)
   while SDL_PollEvent(@event) >= 0 do
   begin
-    //如果当前处于标题画面, 则退出, 用于战斗失败
+    //Exit if it is currently in the title screen, used for battle failure
     if where >= 3 then
     begin
       break;
     end;
 
-    //主地图动态效果
+    //Main map dynamic effect
     now := SDL_GetTicks;
 
-    //闪烁效果
+    //Flashing effect
     if (integer(now - next_time2) > 0) {and (still =  1)} then
     begin
       ChangeCol;
@@ -1862,7 +1867,7 @@ begin
       //SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
     end;
 
-    //飘云
+    //Floating clouds
     if (integer(now - next_time3) > 0) and (MMAPAMI > 0) then
     begin
       for i := 0 to CLOUD_AMOUNT - 1 do
@@ -1880,7 +1885,7 @@ begin
       //SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
     end;
 
-    //主角动作
+    //Main action
     if (integer(now - next_time) > 0) and (Where = 0) then
     begin
       if (walking = 0) then
@@ -1900,7 +1905,7 @@ begin
 
     CheckBasicEvent;
     case event.type_ of
-      //方向键使用压下按键事件, 按下方向设置状态为行走
+      //The arrow keys use the push button event, and the down direction sets the state to walking.
       SDL_KEYDOWN:
       begin
         if (event.key.keysym.sym = SDLK_LEFT) then
@@ -1924,7 +1929,7 @@ begin
           walking := 1;
         end;
       end;
-      //功能键(esc)使用松开按键事件
+      //Function key (esc) uses the release button event
       SDL_KEYUP:
       begin
         keystate := PAnsiChar(SDL_GetKeyboardState(nil));
@@ -1990,7 +1995,7 @@ begin
             gotoEntrance := -1;
             if (Buildy[axp, ayp] > 0) and (Entrance[Axp, Ayp] < 0) then
             begin
-              //点到建筑在附近格内寻找入口
+              //Point to the building to find the entrance in the nearby grid
               axp := Buildx[axp, ayp];
               ayp := Buildy[axp, ayp];
               for i1 := axp - 3 to axp do
@@ -2045,7 +2050,7 @@ begin
       end;
     end;
 
-    //如果主角正在行走, 则移动主角
+    //If the protagonist is walking, move the protagonist
     if walking > 0 then
     begin
       still := 0;
@@ -2114,7 +2119,7 @@ begin
         end;
       end;
 
-      //每走一步均重画屏幕, 并检测是否处于某场景入口
+      //Repaint the screen every step of the way and detect if it is at a scene entrance
       Redraw;
       SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
       if CheckEntrance then
@@ -2141,7 +2146,7 @@ begin
 
     event.key.keysym.sym := 0;
     event.button.button := 0;
-    //走路时不重复画了
+    //Do not repeat painting when walking
     if walking = 0 then
     begin
       if MMAPAMI > 0 then
@@ -2159,7 +2164,7 @@ begin
         end;}
         SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
       end;
-      SDL_Delay(40); //静止时只需刷新率与最频繁的动态效果相同即可
+      SDL_Delay(40); //At rest, the refresh rate is the same as the most frequent dynamic effect.
     end
     else
       SDL_Delay(WALK_SPEED);
@@ -2169,7 +2174,7 @@ begin
 
 end;
 
-//判定主地图某个位置能否行走, 是否变成船
+//Determine whether a position on the main map can walk or not
 
 function CanWalk(x, y: integer): boolean;
 begin
@@ -2200,7 +2205,7 @@ begin
 end;
 
 //Check able or not to ertrance a scence.
-//检测是否处于某入口, 并是否达成进入条件
+//Check if it is at an entrance and whether it has reached the entry condition
 
 function CheckEntrance: boolean;
 var
@@ -2222,7 +2227,7 @@ begin
     snum := entrance[x, y];
     if (Rscence[snum].EnCondition = 0) then
       Result := True;
-    //是否有人轻功超过70
+    //Does anyone have more than 70
     if (Rscence[snum].EnCondition = 2) then
       for i := 0 to 5 do
         if teamlist[i] >= 0 then
@@ -2237,7 +2242,7 @@ begin
       SStep := 0;
       Sx := Rscence[CurScence].EntranceX;
       Sy := Rscence[CurScence].EntranceY;
-      //如达成条件, 进入场景并初始化场景坐标
+      //If the condition is met, enter the scene and initialize the scene coordinates.
       SaveR(6);
       WalkInScence(0);
       event.key.keysym.sym := 0;
@@ -2265,7 +2270,7 @@ end;
 
 //Walk in a scence, the returned value is the scence number when you exit. If it is -1.
 //WalkInScence(1) means the new game.
-//在内场景行走, 如参数为1表示新游戏
+//Walking inside the scene, such as a parameter of 1 indicates a new game
 
 function WalkInScence(Open: integer): integer;
 var
@@ -2274,7 +2279,7 @@ var
   filename: AnsiString;
   scencename: WideString;
   now, next_time, next_time2: uint32;
-  AmiCount: integer; //场景内动态效果计数
+  AmiCount: integer; //Dynamic effect count in the scene
   keystate: PAnsiChar;
   UpDate: PSDL_Thread;
   pos: Tposition;
@@ -2284,7 +2289,7 @@ begin
   next_time := SDL_GetTicks;
 
   Where := 1;
-  walking := 0; // 为0表示静止, 为1表示键盘行走, 为2表示鼠标行走
+  walking := 0; // 0 means static, 1 means keyboard walking, 2 means mouse walking
   just := 0;
   CurEvent := -1;
   AmiCount := 0;
@@ -2321,7 +2326,7 @@ begin
 
   DrawScence;
   ShowScenceName(CurScence);
-  //是否有第3类事件位于场景入口
+  //Is there a third type of event at the scene entrance?
   CheckEvent3;
 
   //if SCENCEAMI = 2 then
@@ -2340,7 +2345,7 @@ begin
       Sx := 0;
     if Sy < 0 then
       Sy := 0;
-    //场景内动态效果
+    //Dynamic effects within the scene
     now := SDL_GetTicks;
     //next_time:=sdl_getticks;
     if integer(now - next_time) > 0 then
@@ -2379,7 +2384,7 @@ begin
       //SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
     end;
 
-    //检查是否位于出口, 如是则退出
+    //Check if it is at the exit, if it is then exit
     if (((Sx = Rscence[CurScence].ExitX[0]) and (Sy = Rscence[CurScence].ExitY[0])) or
       ((Sx = Rscence[CurScence].ExitX[1]) and (Sy = Rscence[CurScence].ExitY[1])) or
       ((Sx = Rscence[CurScence].ExitX[2]) and (Sy = Rscence[CurScence].ExitY[2]))) then
@@ -2388,8 +2393,8 @@ begin
       Result := -1;
       break;
     end;
-    //检查是否位于跳转口, 如是则重新初始化场景
-    //如果处于站立状态则不跳转, 防止连续跳转
+    //Check if it is in the jump port, if yes, reinitialize the scene
+    //If it is in a standing state, it does not jump, preventing continuous jumps
     if ((Sx = Rscence[CurScence].JumpX1) and (Sy = Rscence[CurScence].JumpY1)) and
       (Rscence[CurScence].JumpScence >= 0) {and (SStep <> 0)} then
     begin
@@ -2445,7 +2450,7 @@ begin
           speed := 0;
           //mousewalking := 0;
         end;
-        //按下回车或空格, 检查面对方向是否有第1类事件
+        //Press Enter or Space to check if there is a Class 1 event facing the direction
         if (event.key.keysym.sym = SDLK_RETURN) or (event.key.keysym.sym = SDLK_SPACE) then
         begin
           CheckEvent1;
@@ -2607,7 +2612,7 @@ begin
       end;
     end;
 
-    //是否处于行走状态
+    //Is it walking?
     if walking > 0 then
     begin
       case walking of
@@ -2615,7 +2620,7 @@ begin
         begin
           speed := speed + 1;
           stillcount := 0;
-            {if walking = 2 then //如果用鼠标则重置方向
+            {if walking = 2 then //If you use the mouse, reset the direction
             begin
               SDL_GetMouseState2(x, y);
               if (x < CENTER_x) and (y < CENTER_y) then
@@ -2644,7 +2649,7 @@ begin
             Sy := Sy1;
           end;
 
-          //一定步数之内一次动一格
+          //One move within a certain number of steps
           if (speed <= 1) then
           begin
             SDL_Delay(50);
@@ -2733,7 +2738,7 @@ begin
 
   end;
 
-  instruct_14; //黑屏
+  instruct_14; //Black screen
 
   //ReDraw;
   //SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
@@ -2753,7 +2758,7 @@ var
   Ylist: array[0..4096] of smallint;
   steplist: array[0..4096] of smallint;
   curgrid, totalgrid: integer;
-  Bgrid: array[1..4] of integer; //0空位, 1可过, 2已走过 ,3越界
+  Bgrid: array[1..4] of integer; //0 vacancies, 1 can pass, 2 has passed, 3 crosses
   Xinc, Yinc: array[1..4] of integer;
   curX, curY, curstep, nextX, nextY: integer;
   i, i1, i2, i3: integer;
@@ -2778,7 +2783,7 @@ begin
     curX := Xlist[curgrid];
     curY := Ylist[curgrid];
     curstep := steplist[curgrid];
-    //判断当前点四周格子的状况
+    //Determine the status of the grid around the current point
     case where of
       1:
       begin
@@ -2787,11 +2792,11 @@ begin
           nextX := curX + Xinc[i];
           nextY := curY + Yinc[i];
           if (nextX < 0) or (nextX > 63) or (nextY < 0) or (nextY > 63) then
-            Bgrid[i] := 3  //越界
+            Bgrid[i] := 3  //Crossing
           else if Fway[nextX, nextY] >= 0 then
-            Bgrid[i] := 2 //已走过
+            Bgrid[i] := 2 //Have passed
           else if not CanWalkInScence(curx, cury, nextx, nexty) then
-            Bgrid[i] := 1   //阻碍
+            Bgrid[i] := 1   //Obstruction
           else
             Bgrid[i] := 0;
         end;
@@ -2803,13 +2808,13 @@ begin
           nextX := curX + Xinc[i];
           nextY := curY + Yinc[i];
           if (nextX < 0) or (nextX > 479) or (nextY < 0) or (nextY > 479) then
-            Bgrid[i] := 3 //越界
+            Bgrid[i] := 3 //Crossing
           else if (Entrance[nextx, nexty] >= 0) then
-            Bgrid[i] := 6 //入口
+            Bgrid[i] := 6 //Entrance
           else if Fway[nextX, nextY] >= 0 then
-            Bgrid[i] := 2 //已走过
+            Bgrid[i] := 2 //Have passed
           else if buildx[nextx, nexty] > 0 then
-            Bgrid[i] := 1 //阻碍
+            Bgrid[i] := 1 //Obstruct
           else if ((surface[nextx, nexty] >= 1692) and (surface[nextx, nexty] <= 1700)) then
             Bgrid[i] := 1
           else if (earth[nextx, nexty] = 838) or ((earth[nextx, nexty] >= 612) and (earth[nextx, nexty] <= 670)) then
@@ -2819,19 +2824,19 @@ begin
             ((earth[nextx, nexty] >= 1016) and (earth[nextx, nexty] <= 1022)) then
           begin
             if (nextx = shipy) and (nexty = shipx) then
-              Bgrid[i] := 4 //船
+              Bgrid[i] := 4 //ferry or Boat
             else if ((surface[nextx, nexty] div 2 >= 863) and (surface[nextx, nexty] div 2 <= 872)) or
               ((surface[nextx, nexty] div 2 >= 852) and (surface[nextx, nexty] div 2 <= 854)) or
               ((surface[nextx, nexty] div 2 >= 858) and (surface[nextx, nexty] div 2 <= 860)) then
-              Bgrid[i] := 0 //船
+              Bgrid[i] := 0 //ferry or Boat
             else
-              Bgrid[i] := 5; //水
+              Bgrid[i] := 5; //water
           end
           else
             Bgrid[i] := 0;
         end;
       end;
-      //移动的情况
+      //Mobile situation
     end;
     for i := 1 to 4 do
     begin
@@ -2905,14 +2910,14 @@ var
   scencename: WideString;
 begin
   SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
-  //显示场景名
+  //Display scene name
   if snum >= 0 then
   begin
     scencename := Big5ToUnicode(@Rscence[snum].Name);
     DrawTextWithRect(screen, @scencename[1], CENTER_X - length(PAnsiChar(@Rscence[snum].Name)) * 5 + 7, 100,
       length(PAnsiChar(@Rscence[snum].Name)) * 10 + 6, ColColor(5), ColColor(7));
 
-    //改变音乐
+    //Change music
     if Rscence[snum].EntranceMusic >= 0 then
     begin
       StopMP3;
@@ -2923,7 +2928,7 @@ begin
 
 end;
 
-//判定场景内某个位置能否行走
+//Determine if a location within the scene can walk
 
 function CanWalkInScence(x, y: integer): boolean; overload;
 begin
@@ -2933,7 +2938,7 @@ begin
     Result := False;
   if (SData[CurScence, 3, x, y] >= 0) and (Result) and (DData[CurScence, SData[CurScence, 3, x, y], 0] = 1) then
     Result := False;
-  //直接判定贴图范围
+  //Directly determine the extent of the map
   if ((SData[CurScence, 0, x, y] >= 358) and (SData[CurScence, 0, x, y] <= 362)) or
     (SData[CurScence, 0, x, y] = 522) or (SData[CurScence, 0, x, y] = 1022) or
     ((SData[CurScence, 0, x, y] >= 1324) and (SData[CurScence, 0, x, y] <= 1330)) or
@@ -2951,7 +2956,7 @@ begin
 
 end;
 
-//检查是否有第1类事件, 如有则调用
+//Check if there is a type 1 event, if any
 
 function CheckEvent1: boolean;
 var
@@ -2966,7 +2971,7 @@ begin
     3: x := x + 1;
   end;
   Result := False;
-  //如有则调用事件
+  //Call event if any
   if SData[CurScence, 3, x, y] >= 0 then
   begin
     CurEvent := SData[CurScence, 3, x, y];
@@ -2981,7 +2986,7 @@ begin
   CurEvent := -1;
 end;
 
-//检查是否有第3类事件, 如有则调用
+//Check if there is a type 3 event, if any
 
 procedure CheckEvent3;
 var
@@ -2998,9 +3003,9 @@ begin
   end;
 end;
 
-//Menus.
-//通用选单, (位置(x, y), 宽度, 最大选项(编号均从0开始))
-//使用前必须设置选单使用的字符串组才有效, 字符串组不可越界使用
+// Menus.
+// Universal menu, (Position (x, y), Width, Maximum option (numbers start from 0))
+// must be set before the use of the string group used by the menu is valid, the string group can not be used across the boundary
 
 function CommonMenu(x, y, w, max, default: integer; menuString: array of WideString): integer; overload;
 var
@@ -3111,13 +3116,13 @@ begin
     end;
   end;
 
-  //清空键盘键和鼠标键值, 避免影响其余部分
+  //Clear keyboard keys and mouse button values to avoid affecting the rest
   event.key.keysym.sym := 0;
   event.button.button := 0;
 
 end;
 
-//该选单即时产生显示效果, 由函数指定
+//This menu instantly produces a display effect, specified by the function
 
 function CommonMenu(x, y, w, max, default: integer; menuString, menuEngString: array of WideString;
   fn: TPInt1): integer; overload;
@@ -3195,13 +3200,13 @@ begin
       end;
     end;
   end;
-  //清空键盘键和鼠标键值, 避免影响其余部分
+  //Clear keyboard keys and mouse button values to avoid affecting the rest
   event.key.keysym.sym := 0;
   event.button.button := 0;
 end;
 
-//显示通用选单(位置, 宽度, 最大值)
-//这个通用选单包含两个字符串组, 可分别显示中文和英文
+//Show general menu (position, width, maximum)
+//This general menu contains two string groups, which can display Chinese and English respectively.
 
 procedure ShowCommonMenu(x, y, w, max, menu: integer; menuString: array of WideString); overload;
 var
@@ -3238,7 +3243,7 @@ begin
 
 end;
 
-//卷动选单
+//Scrolling menu
 
 function CommonScrollMenu(x, y, w, max, maxshow: integer; menuString: array of WideString): integer; overload;
 var
@@ -3419,7 +3424,7 @@ begin
       end;
     end;
   end;
-  //清空键盘键和鼠标键值, 避免影响其余部分
+  //Clear keyboard keys and mouse button values to avoid affecting the rest
   event.key.keysym.sym := 0;
   event.button.button := 0;
 
@@ -3456,8 +3461,8 @@ begin
 
 end;
 
-//仅有两个选项的横排选单, 为美观使用横排
-//此类选单中每个选项限制为两个中文字, 仅适用于提问'继续', '取消'的情况
+//Horizontal menu with only two options, horizontal for aesthetics
+//Each option in this menu is limited to two Chinese characters, only for the question 'Continue', 'Cancel'
 
 function CommonMenu2(x, y, w: integer; menuString: array of WideString): integer;
 var
@@ -3544,13 +3549,13 @@ begin
       end;
     end;
   end;
-  //清空键盘键和鼠标键值, 避免影响其余部分
+  //Clear keyboard keys and mouse button values to avoid affecting the rest
   event.key.keysym.sym := 0;
   event.button.button := 0;
 
 end;
 
-//显示仅有两个选项的横排选单
+//Show horizontal menu with only two options
 
 procedure ShowCommonMenu2(x, y, w, menu: integer; menuString: array of WideString);
 var
@@ -3571,7 +3576,7 @@ begin
 
 end;
 
-//选择一名队员, 可以附带两个属性显示
+//Select a player, you can display two attributes
 
 function SelectOneTeamMember(x, y: integer; str: AnsiString; list1, list2: integer): integer;
 var
@@ -3604,7 +3609,7 @@ begin
 
 end;
 
-//主选单
+//Main menu
 
 procedure MenuEsc;
 var
@@ -3612,14 +3617,14 @@ var
   i: integer;
 begin
   NeedRefreshScence := 0;
-  word[0] := ('醫療');
-  word[1] := ('解毒');
-  word[2] := ('物品');
-  word[3] := ('狀態');
-  word[4] := ('離隊');
-  word[5] := ('系統');
+  word[0] := ('Medical');
+  word[1] := ('Detoxification');
+  word[2] := ('article');
+  word[3] := ('status');
+  word[4] := ('Leave the team');
+  word[5] := ('system');
   if MODVersion = 22 then
-    word[4] := ('特殊');
+    word[4] := ('special');
 
   i := 0;
   while i >= 0 do
@@ -3749,21 +3754,21 @@ begin
 
 end;
 
-//显示主选单
+//Display main menu
 
 procedure ShowMenu(menu: integer);
 var
   word: array[0..5] of WideString;
   i, max: integer;
 begin
-  word[0] := ('醫療');
-  word[1] := ('解毒');
-  word[2] := ('物品');
-  word[3] := ('狀態');
-  word[4] := ('離隊');
-  word[5] := ('系統');
+  word[0] := ('Medical');
+  word[1] := ('Detoxification');
+  word[2] := ('article');
+  word[3] := ('status');
+  word[4] := ('Leave the team');
+  word[5] := ('system');
   if MODVersion = 22 then
-    word[4] := ('特殊');
+    word[4] := ('special');
   if where = 0 then
     max := 5
   else
@@ -3771,7 +3776,7 @@ begin
   //LoadFreshScreen(27, 30, 47, max * 22 + 29);
   Redraw;
   DrawRectangle(screen, 27, 30, 46, max * 22 + 28, 0, ColColor(255), 50);
-  //当前所在位置用白色, 其余用黄色
+  //The current location is white, and the rest is yellow.
   for i := 0 to max do
     if i = menu then
     begin
@@ -3787,14 +3792,14 @@ begin
 
 end;
 
-//医疗选单, 需两次选择队员
+//Medical menu, need to select players twice
 
 procedure MenuMedcine;
 var
   role1, role2, menu: integer;
   str: WideString;
 begin
-  str := ('隊員醫療能力');
+  str := ('Team member medical ability');
   DrawTextWithRect(screen, @str[1], 80, 30, 132, ColColor($21), ColColor($23));
   menu := SelectOneTeamMember(80, 65, '%4d', 46, 0);
   //ShowMenu(0);
@@ -3802,7 +3807,7 @@ begin
   if menu >= 0 then
   begin
     role1 := TeamList[menu];
-    str := ('隊員目前生命');
+    str := ('Players current life');
     DrawTextWithRect(screen, @str[1], 230, 30, 132, ColColor($21), ColColor($23));
     menu := SelectOneTeamMember(230, 65, '%4d/%4d', 17, 18);
     if menu >= 0 then
@@ -3817,14 +3822,14 @@ begin
 
 end;
 
-//解毒选单
+//Detoxification menu
 
 procedure MenuMedPoison;
 var
   role1, role2, menu: integer;
   str: WideString;
 begin
-  str := ('隊員解毒能力');
+  str := ('Team detoxification ability');
   DrawTextWithRect(screen, @str[1], 80, 30, 132, ColColor($21), ColColor($23));
   menu := SelectOneTeamMember(80, 65, '%4d', 48, 0);
   //ShowMenu(1);
@@ -3832,7 +3837,7 @@ begin
   if menu >= 0 then
   begin
     role1 := TeamList[menu];
-    str := ('隊員中毒程度');
+    str := ('Player poisoning');
     DrawTextWithRect(screen, @str[1], 230, 30, 132, ColColor($21), ColColor($23));
     menu := SelectOneTeamMember(230, 65, '%4d', 20, 0);
     if menu >= 0 then
@@ -3848,13 +3853,13 @@ begin
 
 end;
 
-//物品选单
+//Item menu
 
 function MenuItem: boolean;
 var
   point, atlu, x, y, col, row, xp, yp, iamount, menu, max, i, xm, ym: integer;
-  //point似乎未使用, atlu为处于左上角的物品在列表中的序号, x, y为光标位置
-  //col, row为总列数和行数
+  //Point does not seem to be used, atlu is the serial number of the item in the upper left corner, x, y is the cursor position
+  //Col, row is the total number of columns and rows
   menuString: array of WideString;
 begin
   col := 9;
@@ -3868,13 +3873,13 @@ begin
     begin
       max := 6;
       setlength(menuString, max + 1);
-      menuString[0] := ('全部物品');
-      menuString[1] := ('劇情物品');
-      menuString[2] := ('神兵寶甲');
-      menuString[3] := ('武功秘笈');
-      menuString[4] := ('靈丹妙藥');
-      menuString[5] := ('傷人暗器');
-      menuString[6] := ('整理物品');
+      menuString[0] := ('All items');
+      menuString[1] := ('Drama item');
+      menuString[2] := ('Shen Bing Bao');
+      menuString[3] := ('Secret of martial arts');
+      menuString[4] := ('Miracle');
+      menuString[5] := ('Injured');
+      menuString[6] := ('Organizing items');
       xm := 80;
       ym := 30;
     end;
@@ -3882,8 +3887,8 @@ begin
     begin
       max := 1;
       setlength(menuString, max + 1);
-      menuString[0] := ('靈丹妙藥');
-      menuString[1] := ('傷人暗器');
+      menuString[0] := ('Miracle');
+      menuString[1] := ('Injured');
       xm := 150;
       ym := 150;
     end;
@@ -4099,7 +4104,7 @@ begin
                 x := 0;
               if y < 0 then
                 y := 0;
-              //鼠标移动时仅在x, y发生变化时才重画
+              //When the mouse moves, it only redraws when x, y changes.
               if (x <> xp) or (y <> yp) then
               begin
                 ShowMenuItem(row, col, x, y, atlu);
@@ -4138,8 +4143,8 @@ begin
 
 end;
 
-//读物品列表, 主要是战斗中需屏蔽一部分物品
-//利用一个不可能用到的数值（100）, 表示读取所有物品
+//Reading the list of items, mainly to shield some items during the battle
+//Use an impossible value (100) to read all items
 
 function ReadItemList(ItemType: integer): integer;
 var
@@ -4164,7 +4169,7 @@ begin
 end;
 
 
-//显示物品选单
+//Display item menu
 
 procedure ShowMenuItem(row, col, x, y, atlu: integer);
 var
@@ -4177,76 +4182,76 @@ var
   p3: array[0..12] of integer;
   color1, color2: integer;
 begin
-  words[0] := ('劇情物品');
-  words[1] := ('神兵寶甲');
-  words[2] := ('武功秘笈');
-  words[3] := ('靈丹妙藥');
-  words[4] := ('傷人暗器');
-  words2[0] := ('生命');
-  words2[1] := ('生命');
-  words2[2] := ('中毒');
-  words2[3] := ('體力');
-  words2[4] := ('內力');
-  words2[5] := ('內力');
-  words2[6] := ('內力');
-  words2[7] := ('攻擊');
-  words2[8] := ('輕功');
-  words2[9] := ('防禦');
-  words2[10] := ('醫療');
-  words2[11] := ('用毒');
-  words2[12] := ('解毒');
-  words2[13] := ('抗毒');
-  words2[14] := ('拳掌');
-  words2[15] := ('御劍');
-  words2[16] := ('耍刀');
-  words2[17] := ('特殊');
-  words2[18] := ('暗器');
-  words2[19] := ('武學');
-  words2[20] := ('品德');
-  words2[21] := ('左右');
-  words2[22] := ('帶毒');
+  words[0] := ('story item');
+  words[1] := ('Shen Bing Bao');
+  words[2] := ('martial arts secrets');
+  words[3] := ('Miracle');
+  words[4] := ('Injured');
+  words2[0] := ('life');
+  words2[1] := ('life');
+  words2[2] := ('Poisoning');
+  words2[3] := ('physical strength');
+  words2[4] := ('Internal force');
+  words2[5] := ('Internal force');
+  words2[6] := ('Internal force');
+  words2[7] := ('attack');
+  words2[8] := ('Light work');
+  words2[9] := ('defense');
+  words2[10] := ('Medical');
+  words2[11] := ('Use poison');
+  words2[12] := ('Detoxification');
+  words2[13] := ('Anti-drug');
+  words2[14] := ('Boxing');
+  words2[15] := ('Yu Jian');
+  words2[16] := ('Knife');
+  words2[17] := ('special');
+  words2[18] := ('hidden weapon');
+  words2[19] := ('Martial arts');
+  words2[20] := ('Morality');
+  words2[21] := ('about');
+  words2[22] := ('Poisonous');
 
-  words3[0] := ('內力');
-  words3[1] := ('內力');
-  words3[2] := ('攻擊');
-  words3[3] := ('輕功');
-  words3[4] := ('用毒');
-  words3[5] := ('醫療');
-  words3[6] := ('解毒');
-  words3[7] := ('拳掌');
-  words3[8] := ('御劍');
-  words3[9] := ('耍刀');
-  words3[10] := ('特殊');
-  words3[11] := ('暗器');
-  words3[12] := ('資質');
+  words3[0] := ('Internal force');
+  words3[1] := ('Internal force');
+  words3[2] := ('attack');
+  words3[3] := ('Light work');
+  words3[4] := ('Use poison');
+  words3[5] := ('Medical');
+  words3[6] := ('Detoxification');
+  words3[7] := ('Boxing');
+  words3[8] := ('Yu Jian');
+  words3[9] := ('Knife');
+  words3[10] := ('special');
+  words3[11] := ('hidden weapon');
+  words3[12] := ('Qualification');
 
   if MODVersion = 22 then
   begin
-    words2[4] := ('靈力');
-    words2[5] := ('靈力');
-    words2[6] := ('靈力');
-    words2[7] := ('武力');
-    words2[8] := ('移動');
-    words2[10] := ('仙術');
-    words2[11] := ('毒術');
-    words2[14] := ('火系');
-    words2[15] := ('水系');
-    words2[16] := ('雷系');
-    words2[17] := ('土系');
-    words2[18] := ('射擊');
+    words2[4] := ('Spiritual power');
+    words2[5] := ('Spiritual power');
+    words2[6] := ('Spiritual power');
+    words2[7] := ('force');
+    words2[8] := ('mobile');
+    words2[10] := ('Fairy');
+    words2[11] := ('Poison');
+    words2[14] := ('Fire system');
+    words2[15] := ('Water system');
+    words2[16] := ('Lei system');
+    words2[17] := ('Soil system');
+    words2[18] := ('shooting');
 
-    words3[0] := ('靈力');
-    words3[1] := ('靈力');
-    words3[2] := ('武力');
-    words3[3] := ('移動');
-    words3[4] := ('毒術');
-    words3[5] := ('仙術');
-    words3[7] := ('火系');
-    words3[8] := ('水系');
-    words3[9] := ('雷系');
-    words3[10] := ('土系');
-    words3[11] := ('射擊');
-    words3[12] := ('智力');
+    words3[0] := ('Spiritual power');
+    words3[1] := ('Spiritual power');
+    words3[2] := ('force');
+    words3[3] := ('mobile');
+    words3[4] := ('Poison');
+    words3[5] := ('Fairy');
+    words3[7] := ('Fire system');
+    words3[8] := ('Water system');
+    words3[9] := ('Lei system');
+    words3[10] := ('Soil system');
+    words3[11] := ('shooting');
+    words3[12] := ('intelligence');
   end;
 
   LoadFreshScreen(0, 0, screen.w, screen.h);
@@ -4282,17 +4287,17 @@ begin
     len := length(PAnsiChar(@Ritem[item].Introduction));
     DrawBig5ShadowText(screen, @Ritem[item].Introduction, 305 - len * 5, 62, ColColor($5), ColColor($7));
     DrawShadowText(screen, @words[Ritem[item].ItemType, 1], 117, 315, ColColor($21), ColColor($23));
-    //如有人使用则显示
+    //Show if someone uses it
     if Ritem[item].User >= 0 then
     begin
       str := ('使用人：');
       DrawShadowText(screen, @str[1], 207, 315, ColColor($21), ColColor($23));
       DrawBig5ShadowText(screen, @Rrole[Ritem[item].User].Name, 297, 315, ColColor($64), ColColor($66));
     end;
-    //如是罗盘则显示坐标
+    //If it is a compass, the coordinates are displayed.
     if item = COMPASS_ID then
     begin
-      str := ('你的位置：');
+      str := ('Your position：');
       DrawShadowText(screen, @str[1], 207, 315, ColColor($21), ColColor($23));
       str := format('%3d, %3d', [My, Mx]);
       DrawEngShadowText(screen, @str[1], 317, 315, ColColor($64), ColColor($66));
@@ -4399,7 +4404,7 @@ begin
 
 end;
 
-//画白色边框作为物品选单的光标
+//Draw a white border as the cursor for the item menu
 
 procedure DrawItemFrame(x, y: integer);
 var
@@ -4422,7 +4427,7 @@ begin
 
 end;
 
-//使用物品
+//Use item
 
 procedure UseItem(inum: integer);
 var
@@ -4433,9 +4438,9 @@ begin
   CurItem := inum;
   Redraw;
   case Ritem[inum].ItemType of
-    0: //剧情物品
+    0: //Drama item
     begin
-      //如某属性大于0, 直接调用事件
+      //If an attribute is greater than 0, the event is called directly.
       if Ritem[inum].UnKnow7 > 0 then
         CallEvent(Ritem[inum].UnKnow7)
       else
@@ -4450,7 +4455,7 @@ begin
             2: y := y - 1;
             3: x := x + 1;
           end;
-          //如面向位置有第2类事件则调用
+          //Called if there is a type 2 event facing the location
           if SData[CurScence, 3, x, y] >= 0 then
           begin
             CurEvent := SData[CurScence, 3, x, y];
@@ -4465,23 +4470,23 @@ begin
         end;
       end;
     end;
-    1: //装备
+    1: //equipment
     begin
       menu := 1;
       if Ritem[inum].User >= 0 then
       begin
         Redraw;
         setlength(menuString, 2);
-        menuString[0] := ('取消');
-        menuString[1] := ('繼續');
-        str := ('此物品正有人裝備，是否繼續？');
+        menuString[0] := ('cancel');
+        menuString[1] := ('carry on');
+        str := ('This item is being equipped, will it continue?');
         DrawTextWithRect(screen, @str[1], 80, 30, 285, ColColor(5), ColColor(7));
         menu := CommonMenu(80, 65, 45, 1, menuString);
       end;
       if menu = 1 then
       begin
         Redraw;
-        str := ('誰要裝備');
+        str := ('Who is going to equip?');
         str1 := Big5ToUnicode(@Ritem[inum].Name);
         DrawTextWithRect(screen, @str[1], 80, 30, length(str1) * 22 + 80, ColColor($21), ColColor($23));
         DrawShadowText(screen, @str1[1], 160, 32, ColColor($64), ColColor($66));
@@ -4504,7 +4509,7 @@ begin
           end
           else
           begin
-            str := ('此人不適合裝備此物品');
+            str := ('This person is not suitable for this item');
             DrawTextWithRect(screen, @str[1], 80, 230, 205, ColColor($64), ColColor($66));
             WaitAnyKey;
             Redraw;
@@ -4513,23 +4518,23 @@ begin
         end;
       end;
     end;
-    2: //秘笈
+    2: //Secret
     begin
       menu := 1;
       if Ritem[inum].User >= 0 then
       begin
         Redraw;
         setlength(menuString, 2);
-        menuString[0] := ('取消');
-        menuString[1] := ('繼續');
-        str := ('此秘笈正有人修煉，是否繼續？');
+        menuString[0] := ('cancel');
+        menuString[1] := ('carry on');
+        str := ('This secret is being cultivated. Does it continue?');
         DrawTextWithRect(screen, @str[1], 80, 30, 285, ColColor(5), ColColor(7));
         menu := CommonMenu(80, 65, 45, 1, menuString);
       end;
       if menu = 1 then
       begin
         Redraw;
-        str := ('誰要修煉');
+        str := ('Who wants to practice');
         str1 := Big5ToUnicode(@Ritem[inum].Name);
         DrawTextWithRect(screen, @str[1], 80, 30, length(str1) * 22 + 80, ColColor($21), ColColor($23));
         DrawShadowText(screen, @str1[1], 160, 32, ColColor($64), ColColor($66));
@@ -4551,7 +4556,7 @@ begin
           end
           else
           begin
-            str := ('此人不適合修煉此秘笈');
+            str := ('This person is not suitable for practicing this secret.');
             DrawTextWithRect(screen, @str[1], 80, 230, 205, ColColor($64), ColColor($66));
             WaitAnyKey;
             Redraw;
@@ -4560,11 +4565,11 @@ begin
         end;
       end;
     end;
-    3: //药品
+    3: //drug
     begin
       if where <> 2 then
       begin
-        str := ('誰要服用');
+        str := ('Who wants to take');
         str1 := Big5ToUnicode(@Ritem[inum].Name);
         DrawTextWithRect(screen, @str[1], 80, 30, length(str1) * 22 + 80, ColColor($21), ColColor($23));
         DrawShadowText(screen, @str1[1], 160, 32, ColColor($64), ColColor($66));
@@ -4580,7 +4585,7 @@ begin
         WaitAnyKey;
       end;
     end;
-    4: //不处理暗器类物品
+    4: //Do not handle hidden objects
     begin
       //if where<>3 then break;
     end;
@@ -4588,7 +4593,7 @@ begin
 
 end;
 
-//能否装备
+//Can equipment
 
 function CanEquip(rnum, inum: integer): boolean;
 var
@@ -4597,8 +4602,8 @@ var
   str: WideString;
 begin
 
-  //判断是否符合
-  //注意这里对'所需属性'为负值时均添加原版类似资质的处理
+  //Determine whether it is consistent
+  //Note that the original version of the similar qualification is added when the 'required attribute' is negative.
 
   Result := True;
 
@@ -4627,19 +4632,19 @@ begin
   if sign(Ritem[inum].NeedAptitude) * Rrole[rnum].Aptitude < Ritem[inum].NeedAptitude then
     Result := False;
 
-  //内力性质
+  //Internal force
   if (Rrole[rnum].MPType < 2) and (Ritem[inum].NeedMPType < 2) then
     if Rrole[rnum].MPType <> Ritem[inum].NeedMPType then
       Result := False;
 
-  //如有专用人物, 前面的都作废
+  //If there are special characters, the front is invalid.
   if (Ritem[inum].OnlyPracRole >= 0) and (Result = True) then
     if (Ritem[inum].OnlyPracRole = rnum) then
       Result := True
     else
       Result := False;
 
-  //如已有10种武功, 且物品也能练出武功, 则结果为假
+  //If there are 10 kinds of martial arts, and the items can also be martial arts, the result is false.
   r := 0;
   for i := 0 to 9 do
     if Rrole[rnum].Magic[i] > 0 then
@@ -4647,7 +4652,7 @@ begin
   if (r >= 10) and (Ritem[inum].Magic > 0) then
     Result := False;
 
-  //如果已有秘籍所练出的武功且小于10级, 则为真
+  //True if there is already martial arts trained by cheats and less than 10
   for i := 0 to 9 do
     if (Rrole[rnum].Magic[i] = Ritem[inum].Magic) and (Rrole[rnum].MagLevel[i] < 900) then
     begin
@@ -4655,13 +4660,13 @@ begin
       break;
     end;
 
-  //如果以上判定为真, 且属于自宫物品, 则提问, 若选否则为假
+  //If the above judgment is true and belongs to the self-property item, ask questions, if it is elected otherwise, it is false.
   if (inum in [78, 93]) and (Result = True) and (Rrole[rnum].Sexual <> 2) then
   begin
     Redraw;
-    menuString[0] := ('取消');
-    menuString[1] := ('繼續');
-    str := ('是否自宮？');
+    menuString[0] := ('cancel');
+    menuString[1] := ('carry on');
+    str := ('Is it from the palace?');
     DrawTextWithRect(screen, @str[1], 80, 30, 105, ColColor(7), ColColor(5));
     if CommonMenu(80, 65, 45, 1, menuString) = 1 then
       Rrole[rnum].Sexual := 2
@@ -4671,7 +4676,7 @@ begin
 
 end;
 
-//查看状态选单
+//View status menu
 
 procedure MenuStatus;
 var
@@ -4679,7 +4684,7 @@ var
   menu, amount, i: integer;
   menuString, menuEngString: array of WideString;
 begin
-  str := ('查看隊員狀態');
+  str := ('View player status');
   Redraw;
   RecordFreshScreen(0, 0, screen.w, screen.h);
   SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
@@ -4711,7 +4716,7 @@ begin
 
 end;
 
-//显示状态
+//Display state
 
 procedure ShowStatusByTeam(tnum: integer);
 begin
@@ -4734,42 +4739,42 @@ var
   color1, color2: uint32;
   Name: WideString;
 begin
-  strs[0] := ('等級');
-  strs[1] := ('生命');
-  strs[2] := ('內力');
-  strs[3] := ('體力');
-  strs[4] := ('經驗');
-  strs[5] := ('升級');
-  strs[6] := ('攻擊');
-  strs[7] := ('防禦');
-  strs[8] := ('輕功');
-  strs[9] := ('醫療能力');
-  strs[10] := ('用毒能力');
-  strs[11] := ('解毒能力');
-  strs[12] := ('拳掌功夫');
-  strs[13] := ('御劍能力');
-  strs[14] := ('耍刀技巧');
-  strs[15] := ('特殊兵器');
-  strs[16] := ('暗器技巧');
-  strs[17] := ('裝備物品');
-  strs[18] := ('修煉物品');
-  strs[19] := ('所會武功');
-  strs[20] := ('受傷');
-  strs[21] := ('中毒');
+  strs[0] := ('grade');
+  strs[1] := ('life');
+  strs[2] := ('Internal force');
+  strs[3] := ('physical strength');
+  strs[4] := ('experience');
+  strs[5] := ('upgrade');
+  strs[6] := ('attack');
+  strs[7] := ('defense');
+  strs[8] := ('Light work');
+  strs[9] := ('Medical ability');
+  strs[10] := ('Poisoning ability');
+  strs[11] := ('Detoxification ability');
+  strs[12] := ('Boxing');
+  strs[13] := ('Royal sword ability');
+  strs[14] := ('Knife skill');
+  strs[15] := ('Special weapon');
+  strs[16] := ('Darkcover technique');
+  strs[17] := ('Equipment item');
+  strs[18] := ('Practice items');
+  strs[19] := ('Wugong');
+  strs[20] := ('Injured');
+  strs[21] := ('Poisoning');
 
   if MODVersion = 22 then
   begin
-    strs[2] := ('靈力');
-    strs[6] := ('武力');
-    strs[8] := ('移動');
-    strs[9] := ('仙術能力');
-    strs[10] := ('毒術能力');
-    strs[12] := ('火系能力');
-    strs[13] := ('水系能力');
-    strs[14] := ('雷系能力');
-    strs[15] := ('土系能力');
-    strs[16] := ('射擊能力');
-    strs[19] := ('所會法術');
+    strs[2] := ('Spiritual power');
+    strs[6] := ('force');
+    strs[8] := ('mobile');
+    strs[9] := ('Fairy ability');
+    strs[10] := ('Poison ability');
+    strs[12] := ('Fire capacity');
+    strs[13] := ('Water capacity');
+    strs[14] := ('Thunder ability');
+    strs[15] := ('Soil ability');
+    strs[16] := ('Shooting ability');
+    strs[19] := ('Spell');
   end;
 
   p[0] := 43;
@@ -4789,13 +4794,13 @@ begin
 
   DrawRectangle(screen, x, y, 525, 315, 0, ColColor(255), 50);
 
-  //显示头像
+  //Display avatar
   DrawHeadPic(Rrole[rnum].HeadNum, x + 60, y + 80);
-  //显示姓名
+  //Display name
   Name := Big5ToUnicode(@Rrole[rnum].Name, 5);
   DrawShadowText(screen, @Name[1], x + 88 - DrawLength(Name) * 5, y + 85,
     ColColor($66), ColColor($63));
-  //显示所需字符
+  //Display the desired character
   for i := 0 to 5 do
     DrawShadowText(screen, @strs[i, 1], x + 10, y + 110 + 21 * i, ColColor($21), ColColor($23));
   for i := 6 to 16 do
@@ -4819,8 +4824,8 @@ begin
     addspeed := addspeed + Ritem[Rrole[rnum].Equip[1]].AddSpeed;
   end;
 
-  //攻击, 防御, 轻功
-  //单独处理是因为显示顺序和存储顺序不同
+  //Attack, defense, light work
+  //Processed separately because the display order and storage order are different
   str := format('%4d', [Rrole[rnum].Attack + addatk]);
   DrawEngShadowText(screen, @str[1], x + 280, y + 5 + 21 * 0, ColColor($5), ColColor($7));
   str := format('%4d', [Rrole[rnum].Defence + adddef]);
@@ -4828,7 +4833,7 @@ begin
   str := format('%4d', [Rrole[rnum].Speed + addspeed]);
   DrawEngShadowText(screen, @str[1], x + 280, y + 5 + 21 * 2, ColColor($5), ColColor($7));
 
-  //其他属性
+  //Other attributes
   str := format('%4d', [Rrole[rnum].Medcine]);
   DrawEngShadowText(screen, @str[1], x + 280, y + 5 + 21 * 3, ColColor($5), ColColor($7));
 
@@ -4853,7 +4858,7 @@ begin
   str := format('%4d', [Rrole[rnum].HidWeapon]);
   DrawEngShadowText(screen, @str[1], x + 280, y + 5 + 21 * 10, ColColor($5), ColColor($7));
 
-  //武功
+  //Wugong
   for i := 0 to 9 do
   begin
     magicnum := Rrole[rnum].magic[i];
@@ -4866,7 +4871,7 @@ begin
   end;
   str := format('%4d', [Rrole[rnum].Level]);
   DrawEngShadowText(screen, @str[1], x + 110, y + 110, ColColor($5), ColColor($7));
-  //生命值, 在受伤和中毒值不同时使用不同颜色
+  //Health, use different colors when the injury and poisoning values are different
   case Rrole[rnum].Hurt of
     34..66:
     begin
@@ -4909,7 +4914,7 @@ begin
   end;
   str := format('%4d', [Rrole[rnum].MaxHP]);
   DrawEngShadowText(screen, @str[1], x + 110, y + 131, color1, color2);
-  //内力, 依据内力性质使用颜色
+  //Internal force, use color according to the nature of internal force
   if Rrole[rnum].MPType = 0 then
   begin
     color1 := ColColor($50);
@@ -4927,10 +4932,10 @@ begin
   end;
   str := format('%4d/%4d', [Rrole[rnum].CurrentMP, Rrole[rnum].MaxMP]);
   DrawEngShadowText(screen, @str[1], x + 60, y + 152, color1, color2);
-  //体力
+  //physical strength
   str := format('%4d/%4d', [Rrole[rnum].PhyPower, MAX_PHYSICAL_POWER]);
   DrawEngShadowText(screen, @str[1], x + 60, y + 173, ColColor($5), ColColor($7));
-  //经验
+  //experience
   str := format('%5d', [uint16(Rrole[rnum].Exp)]);
   DrawEngShadowText(screen, @str[1], x + 100, y + 194, ColColor($5), ColColor($7));
   str := format('%5d', [uint16(Leveluplist[Rrole[rnum].Level - 1])]);
@@ -4943,13 +4948,13 @@ begin
   //drawshadowtext(@strs[21, 1], 30, 362, colcolor($23), colcolor($21));
 
   //drawrectanglewithoutframe(100,351,Rrole[rnum,19],10,colcolor($16),50);
-  //中毒, 受伤
+  //Poisoned, injured
   //str := format('%4d', [RRole[rnum].Hurt]);
   //drawengshadowtext(@str[1], 150, 341, colcolor($14), colcolor($16));
   //str := format('%4d', [RRole[rnum].Poison]);
   //drawengshadowtext(@str[1], 150, 362, colcolor($35), colcolor($37));
 
-  //装备, 秘笈
+  //Equipment, secret
   DrawShadowText(screen, @strs[17, 1], x + 180, y + 240, ColColor($21), ColColor($23));
   DrawShadowText(screen, @strs[18, 1], x + 360, y + 240, ColColor($21), ColColor($23));
   if Rrole[rnum].Equip[0] >= 0 then
@@ -4957,7 +4962,7 @@ begin
   if Rrole[rnum].Equip[1] >= 0 then
     DrawBig5ShadowText(screen, @Ritem[Rrole[rnum].Equip[1]].Name, x + 190, y + 282, ColColor($5), ColColor($7));
 
-  //计算秘笈需要经验
+  //Computational tips require experience
   if Rrole[rnum].PracticeBook >= 0 then
   begin
     mlevel := 1;
@@ -4981,7 +4986,7 @@ begin
 
 end;
 
-//显示简单状态(x, y表示位置)
+//Show simple state (x, y indicates position)
 
 procedure ShowSimpleStatus(rnum, x, y: integer);
 var
@@ -4991,13 +4996,13 @@ var
   strs: array[0..3] of WideString;
   color1, color2: uint32;
 begin
-  strs[0] := ('等級');
-  strs[1] := ('生命');
-  strs[2] := ('內力');
-  strs[3] := ('體力');
+  strs[0] := ('grade');
+  strs[1] := ('life');
+  strs[2] := ('Internal force');
+  strs[3] := ('physical strength');
   if MODVersion = 22 then
   begin
-    strs[2] := ('靈力');
+    strs[2] := ('Spiritual power');
   end;
 
   DrawRectangle(screen, x, y, 145, 173, 0, ColColor(255), 50);
@@ -5079,7 +5084,7 @@ begin
   SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
 end;
 
-//离队选单
+//Departure menu
 
 procedure MenuLeave;
 var
@@ -5088,9 +5093,9 @@ var
 begin
   if (where = 0) or (MODVersion = 22) then
   begin
-    str := ('要求誰離隊？');
+    str := ('Who is leaving the team?');
     if MODVersion = 22 then
-      str := '選擇一個隊友';
+      str := 'Choose a teammate';
     DrawTextWithRect(screen, @str[1], 80, 30, 132, ColColor($21), ColColor($23));
     menu := SelectOneTeamMember(80, 65, '%3d', 15, 0);
     if menu >= 0 then
@@ -5109,7 +5114,7 @@ begin
   end
   else
   begin
-    str := '場景內不可離隊！';
+    str := 'Can not leave the team within the scene!';
     DrawTextWithRect(screen, @str[1], 80, 30, 172, ColColor($21), ColColor($23));
     WaitAnyKey;
   end;
@@ -5117,19 +5122,19 @@ begin
   SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
 end;
 
-//系统选单
+//System menu
 
 procedure MenuSystem;
 var
   word: array[0..3] of WideString;
   i: integer;
 begin
-  word[0] := ('讀取');
-  word[1] := ('存檔');
-  word[2] := ('全屏');
-  word[3] := ('離開');
+  word[0] := ('Read');
+  word[1] := ('Archive');
+  word[2] := ('full screen');
+  word[3] := ('go away');
   if FULLSCREEN = 1 then
-    word[2] := ('窗口');
+    word[2] := ('window');
 
   i := 0;
   while i >= 0 do
@@ -5259,19 +5264,19 @@ begin
 
 end;}
 
-//显示系统选单
+//Display system menu
 
 procedure ShowMenuSystem(menu: integer);
 {var
   word: array[0..3] of Widestring;
   i: integer;}
 begin
-  {Word[0] := (' 讀取');
-  Word[1] := (' 存檔');
-  Word[2] := (' 全屏');
-  Word[3] := (' 離開');
+  {Word[0] := (' Read');
+  Word[1] := (' Archive');
+  Word[2] := (' full screen');
+  Word[3] := (' go away');
   if fullscreen = 1 then
-    Word[2] := (' 窗口');
+    Word[2] := (' window');
 
   DrawRectangle(80, 30, 46, 92, 0, colcolor(255), 30);
   for i := 0 to 3 do
@@ -5289,7 +5294,7 @@ begin
 
 end;
 
-//读档选单
+//Read menu
 
 procedure MenuLoad;
 var
@@ -5299,12 +5304,12 @@ begin
   nowwhere := where;
   //setlength(menustring, 6);
   //setlength(Menuengstring, 0);
-  menuString[0] := ('進度一');
-  menuString[1] := ('進度二');
-  menuString[2] := ('進度三');
-  menuString[3] := ('進度四');
-  menuString[4] := ('進度五');
-  menuString[5] := ('自動檔');
+  menuString[0] := ('Progress one');
+  menuString[1] := ('Progress two');
+  menuString[2] := ('Progress three');
+  menuString[3] := ('Progress four');
+  menuString[4] := ('Progress five');
+  menuString[5] := ('Automatic file');
   menu := CommonMenu(133, 30, 67, 5, menuString);
   if menu >= 0 then
   begin
@@ -5326,7 +5331,7 @@ begin
 
 end;
 
-//特殊的读档选单, 仅用在开始时读档
+//Special reading menu, only used to read at the beginning
 
 function MenuLoadAtBeginning: integer;
 var
@@ -5337,20 +5342,20 @@ begin
   SDL_UpdateRect2(screen, 0, 0, screen.w, screen.h);
   //setlength(menustring, 6);
   //setlength(Menuengstring, 0);
-  menuString[0] := ('載入進度一');
-  menuString[1] := ('載入進度二');
-  menuString[2] := ('載入進度三');
-  menuString[3] := ('載入進度四');
-  menuString[4] := ('載入進度五');
-  menuString[5] := ('載入自動檔');
+  menuString[0] := ('Loading progress one');
+  menuString[1] := ('Loading progress two');
+  menuString[2] := ('Loading progress three');
+  menuString[3] := ('Loading progress four');
+  menuString[4] := ('Loading progress five');
+  menuString[5] := ('Load auto file');
   if MODVersion = 23 then
   begin
-    menuString[0] := ('載入夢境一');
-    menuString[1] := ('載入夢境二');
-    menuString[2] := ('載入夢境三');
-    menuString[3] := ('載入夢境四');
-    menuString[4] := ('載入夢境五');
-    menuString[5] := ('最近的夢境');
+    menuString[0] := ('Loading dream one');
+    menuString[1] := ('Loading Dream II');
+    menuString[2] := ('Loading Dreamland III');
+    menuString[3] := ('Loading dream four');
+    menuString[4] := ('Loading dream five');
+    menuString[5] := ('Recent dreams');
   end;
   //writeln(pword(@menustring[0][2])^);
   menu := CommonMenu(TitlePosition.x - 10, TitlePosition.y - 20, 107, 5, menuString);
@@ -5365,7 +5370,7 @@ begin
   Result := menu;
 end;
 
-//存档选单
+//Archive menu
 
 procedure MenuSave;
 var
@@ -5374,11 +5379,11 @@ var
 begin
   //setlength(menustring, 5);
   //setlength(menuengstring, 0);
-  menuString[0] := ('進度一');
-  menuString[1] := ('進度二');
-  menuString[2] := ('進度三');
-  menuString[3] := ('進度四');
-  menuString[4] := ('進度五');
+  menuString[0] := ('Progress one');
+  menuString[1] := ('Progress two');
+  menuString[2] := ('Progress three');
+  menuString[3] := ('Progress four');
+  menuString[4] := ('Progress five');
   menu := CommonMenu(133, 30, 67, 4, menuString);
   if menu >= 0 then
     SaveR(menu + 1);
@@ -5387,7 +5392,7 @@ begin
   ShowMenuSystem(1);
 end;
 
-//退出选单
+//Exit menu
 
 procedure MenuQuit;
 var
@@ -5398,9 +5403,9 @@ var
 begin
   //setlength(menustring, 3);
   //setlength(menuengstring, 0);
-  menuString[0] := ('取消');
-  menuString[1] := ('確認');
-  menuString[2] := ('腳本');
+  menuString[0] := ('cancel');
+  menuString[1] := ('Exit Confirmation');
+  menuString[2] := ('script');
   menu := CommonMenu(133, 30, 45, 2, menuString);
   if menu = 1 then
   begin
@@ -5430,8 +5435,8 @@ begin
   end;
 end;
 
-//医疗的效果
-//未添加体力的需求与消耗
+//Medical effect
+//No physical strength and consumption
 
 function EffectMedcine(role1, role2: integer): integer;
 var
@@ -5457,11 +5462,11 @@ begin
     Redraw;
     DrawRectangle(screen, 115, 98, 155, 76, 0, ColColor(255), 30);
     DrawBig5ShadowText(screen, @Rrole[role2].Name, 120, 100, ColColor($21), ColColor($23));
-    word := ('增加生命');
+    word := ('Increase life');
     DrawShadowText(screen, @word[1], 120, 125, ColColor($5), ColColor($7));
     word := format('%4d', [addlife]);
     DrawEngShadowText(screen, @word[1], 220, 125, ColColor($64), ColColor($66));
-    word := ('減少受傷');
+    word := ('Reduce injuries');
     DrawShadowText(screen, @word[1], 120, 150, ColColor($5), ColColor($7));
     word := format('%4d', [minushurt]);
     DrawEngShadowText(screen, @word[1], 220, 150, ColColor($64), ColColor($66));
@@ -5473,7 +5478,7 @@ begin
 
 end;
 
-//解毒的效果
+//Detoxification effect
 
 function EffectMedPoison(role1, role2: integer): integer;
 var
@@ -5490,7 +5495,7 @@ begin
   begin
     Redraw;
     DrawRectangle(screen, 115, 98, 155, 51, 0, ColColor(255), 30);
-    word := ('減少中毒');
+    word := ('Reduce poisoning');
     DrawShadowText(screen, @word[1], 120, 125, ColColor($5), ColColor($7));
     DrawBig5ShadowText(screen, @Rrole[role2].Name, 120, 100, ColColor($21), ColColor($23));
     word := format('%4d', [minuspoi]);
@@ -5502,9 +5507,9 @@ begin
   end;
 end;
 
-//使用物品的效果
-//练成秘笈的效果
-//返回值: 无武学的秘笈, 如果次数可以将能力提升到顶仍有剩余时, 则返回所需的次数, 避免浪费经验
+//Use item effects
+//Practice the secret effect
+//Return value: There is no secret of martial arts. If the number of times can increase the ability until the top remains, return the required number of times to avoid wasting experience.
 
 function EatOneItem(rnum, inum: integer; times: integer = 1; display: integer = 1): integer;
 var
@@ -5545,13 +5550,13 @@ begin
     else
       addvalue[i] := Ritem[inum].Data[45 + i];
   end;
-  //减少受伤
+  //Reduce injuries
   addvalue[23] := -(addvalue[0] div LIFE_HURT);
 
   if -addvalue[23] > Rrole[rnum].Data[19] then
     addvalue[23] := -Rrole[rnum].Data[19];
 
-  //增加生命, 内力最大值的处理
+  //Increase life, the processing of the maximum internal force
   if addvalue[1] + Rrole[rnum].Data[18] > MAX_HP then
     addvalue[1] := MAX_HP - Rrole[rnum].Data[18];
   if addvalue[6] + Rrole[rnum].Data[42] > MAX_MP then
@@ -5561,7 +5566,7 @@ begin
   if addvalue[6] + Rrole[rnum].Data[42] < 0 then
     addvalue[6] := -Rrole[rnum].Data[42];
 
-  //仅控制不为零的项目
+  //Control only items that are not zero
   for i := 7 to 22 do
   begin
     if addvalue[i] <> 0 then
@@ -5572,16 +5577,16 @@ begin
         addvalue[i] := -Rrole[rnum].Data[rolelist[i]];
     end;
   end;
-  //生命不能超过最大值
+  //Life cannot exceed the maximum
   if addvalue[0] + Rrole[rnum].Data[17] > addvalue[1] + Rrole[rnum].Data[18] then
     addvalue[0] := addvalue[1] + Rrole[rnum].Data[18] - Rrole[rnum].Data[17];
-  //中毒不能小于0
+  //Poisoning cannot be less than 0
   if addvalue[2] + Rrole[rnum].Data[20] < 0 then
     addvalue[2] := -Rrole[rnum].Data[20];
-  //体力不能超过100
+  //Physical strength cannot exceed 100
   if addvalue[3] + Rrole[rnum].Data[21] > MAX_PHYSICAL_POWER then
     addvalue[3] := MAX_PHYSICAL_POWER - Rrole[rnum].Data[21];
-  //内力不能超过最大值
+  //Internal force cannot exceed the maximum
   if addvalue[5] + Rrole[rnum].Data[41] > addvalue[6] + Rrole[rnum].Data[42] then
     addvalue[5] := addvalue[6] + Rrole[rnum].Data[42] - Rrole[rnum].Data[41];
   p := 0;
@@ -5590,16 +5595,16 @@ begin
     if (i <> 4) and (i <> 21) and (addvalue[i] <> 0) then
       p := p + 1;
   end;
-  //内力属性
+  //Internal force attribute
   if (addvalue[4] = 2) and (Rrole[rnum].Data[40] <> 2) then
     p := p + 1;
-  //左右互搏
+  //Left and right
   if (addvalue[21] = 1) and (Rrole[rnum].Data[58] <> 1) then
     p := p + 1;
 
   if (Ritem[inum].ItemType = 2) and (Ritem[inum].Magic <= 0) then
   begin
-    //对次数的修正
+    //Correction of the number of times
     Result := 0;
     for i := 0 to 22 do
     begin
@@ -5616,55 +5621,55 @@ begin
     Result := times;
   if display <> 0 then
   begin
-    word[0] := ('增加生命');
-    word[1] := ('增加生命最大值');
-    word[2] := ('中毒程度');
-    word[3] := ('增加體力');
-    word[4] := ('內力門路陰陽合一');
-    word[5] := ('增加內力');
-    word[6] := ('增加內力最大值');
-    word[7] := ('增加攻擊力');
-    word[8] := ('增加輕功');
-    word[9] := ('增加防禦力');
-    word[10] := ('增加醫療能力');
-    word[11] := ('增加用毒能力');
-    word[12] := ('增加解毒能力');
-    word[13] := ('增加抗毒能力');
-    word[14] := ('增加拳掌能力');
-    word[15] := ('增加御劍能力');
-    word[16] := ('增加耍刀能力');
-    word[17] := ('增加特殊兵器');
-    word[18] := ('增加暗器技巧');
-    word[19] := ('增加武學常識');
-    word[20] := ('增加品德指數');
-    word[21] := ('習得左右互搏');
-    word[22] := ('增加攻擊帶毒');
-    word[23] := ('受傷程度');
+    word[0] := ('Increase life');
+    word[1] := ('Increase the maximum value of life');
+    word[2] := ('Degree of poisoning');
+    word[3] := ('Increase physical strength');
+    word[4] := ('Yinlimen Road Yinyang');
+    word[5] := ('Increase internal force');
+    word[6] := ('Increase internal force maximum');
+    word[7] := ('Increase attack power');
+    word[8] := ('Increase light work');
+    word[9] := ('Increase defense');
+    word[10] := ('Increase medical ability');
+    word[11] := ('Increase the ability to use drugs');
+    word[12] := ('Increase detoxification ability');
+    word[13] := ('Increase anti-virus ability');
+    word[14] := ('Increase the ability of boxing');
+    word[15] := ('Increase the ability of the sword');
+    word[16] := ('Increase the ability to play');
+    word[17] := ('Add special weapons');
+    word[18] := ('Add hidden weapon skills');
+    word[19] := ('Increase martial arts knowledge');
+    word[20] := ('Increase the moral index');
+    word[21] := ('Learn to fight');
+    word[22] := ('Increase attack poison');
+    word[23] := ('Degree of injury');
 
     if MODVersion = 22 then
     begin
-      word[4] := ('靈力陰陽合一');
-      word[5] := ('增加靈力');
-      word[6] := ('增加靈力最大值');
-      word[7] := ('增加武力');
-      word[8] := ('增加移動');
-      word[10] := ('增加仙術能力');
-      word[11] := ('增加用毒術能力');
-      word[14] := ('增加火系能力');
-      word[15] := ('增加水系能力');
-      word[16] := ('增加雷系能力');
-      word[17] := ('增加土系能力');
-      word[18] := ('增加射擊能力');
+      word[4] := ('Spiritual yin and yang');
+      word[5] := ('Increase spiritual power');
+      word[6] := ('Increase the maximum spiritual power');
+      word[7] := ('Increase force');
+      word[8] := ('Increase movement');
+      word[10] := ('Increase the ability of the fairy');
+      word[11] := ('Increase the ability to use poison');
+      word[14] := ('Increase firepower');
+      word[15] := ('Increase water system capacity');
+      word[16] := ('Increase the ability of lightning');
+      word[17] := ('Increase soil capacity');
+      word[18] := ('Increase shooting ability');
     end;
 
     DrawRectangle(screen, 100, 70, 100 + length(PAnsiChar(@Ritem[inum].Name)) * 10, 25, 0, ColColor(255), 50);
-    str := '服用';
+    str := 'Taking';
     if Ritem[inum].ItemType = 2 then
-      str := UTF8Decode(format('練成%d次', [Result]));
+      str := UTF8Decode(format('Practiced %d times', [Result]));
     DrawShadowText(screen, @str[1], 103, 72, ColColor($21), ColColor($23));
     DrawBig5ShadowText(screen, @Ritem[inum].Name, 193, 72, ColColor($64), ColColor($66));
 
-    //如果增加的项超过11个, 分两列显示
+    //If more than 11 items are added, they are displayed in two columns.
     if p < 11 then
     begin
       l := p;
@@ -5684,7 +5689,7 @@ begin
     DrawBig5ShadowText(screen, @Rrole[rnum].Data[4], x + 20, 102, ColColor($21), ColColor($23));
     if p = 0 then
     begin
-      str := ('未增加屬性');
+      str := ('No added attribute');
       DrawShadowText(screen, @str[1], 183, 102, ColColor(5), ColColor(7));
     end;
     p := 0;
@@ -5716,7 +5721,7 @@ begin
         DrawEngShadowText(screen, @str[1], 243 + x, 124 + y + p * 22, ColColor($64), ColColor($66));
         p := p + 1;
       end;
-      //对内力性质特殊处理
+      //Special treatment of internal force properties
       if (i = 4) and (addvalue[i] = 2) then
       begin
         if Rrole[rnum].Data[rolelist[i]] <> 2 then
@@ -5726,7 +5731,7 @@ begin
           p := p + 1;
         end;
       end;
-      //对左右互搏特殊处理
+      //Special treatment for left and right mutual combat
       if (i = 21) and (addvalue[i] = 1) then
       begin
         if Rrole[rnum].Data[rolelist[i]] <> 1 then
@@ -5747,7 +5752,7 @@ begin
 end;
 
 //Event.
-//事件系统
+//Event system
 
 procedure CallEvent(num: integer);
 var
@@ -5806,7 +5811,7 @@ begin
         Write(e[i + 1], ',', e[i + 2], ',', e[i + 3], ',', e[i + 4], ',', e[i + 5], ',', e[i + 6], ',', e[i + 7]);}
       //writeln;
     end;
-    //普通事件写成子程, 需跳转事件写成函数
+    //Normal events are written as subroutines, and jump events are written as functions.
     while SDL_PollEvent(@event) >= 0 do
     begin
       CheckBasicEvent;
@@ -6180,7 +6185,7 @@ begin
   //event.button.button := 0;
   //CurScenceRolePic := tempPic;;
   //CurScenceRolePic := 2500 + SFace * 7 + 1;
-  //事件执行完之后不刷新场景, 是因为有可能在事件本身包含另一事件, 避免频繁刷新
+  //The scene is not refreshed after the event is executed, because it is possible to include another event in the event itself, avoid frequent refreshes.
   if NeedRefreshScence = 1 then
   begin
     InitialScence(0);
