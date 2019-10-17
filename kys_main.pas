@@ -11,9 +11,9 @@
  
  Created by S.weyl in 2008 May.
  No Copyright (C) reserved.
- 
+
  You can build it by Delphi with JEDI-SDL support.
- 
+
  This resouce code file which is not perfect so far,
  can be modified and rebuilt freely,
  or translate it to another programming language.
@@ -204,7 +204,7 @@ begin
 
   //SDL_WM_SetIcon(IMG_Load(PAnsiChar(AppPath + 'resource/icon.png')), 0);
 
-  ScreenFlag := SDL_WINDOW_RESIZABLE;
+  ScreenFlag := SDL_WINDOW_FULLSCREEN; //was SDL_WINDOW_RESIZABLE
   {SDL_HWSURFACE or SDL_HWACCEL or SDL_ANYFORMAT or SDL_ASYNCBLIT or SDL_FULLSCREEN};
   {if GLHR = 1 then
   begin
@@ -721,6 +721,7 @@ var
   str: WideString;
   p: integer;
 begin
+
   instruct_14;
   Redraw;
   i := FileOpen(PAnsiChar(AppPath + 'list/start.txt'), fmOpenRead);

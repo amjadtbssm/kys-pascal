@@ -1,6 +1,5 @@
 ﻿program kys;
 
-//{$MODE Delphi}
 {$IFDEF UNIX}
 {$LINKLIB SDL_ttf}
 {$LINKLIB SDL_image}
@@ -9,8 +8,6 @@
 {$ELSE}
 
 {$ENDIF}
-
-//{$APPTYPE CONSOLE}
 
 uses
   SysUtils,
@@ -29,7 +26,6 @@ uses
 
 begin
   Application.Initialize;
-  //Application.Run;
   Run;
 
 end.
