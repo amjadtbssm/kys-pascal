@@ -1,4 +1,4 @@
-#"Jin Yong Qun Xia Chuan" Reissue Edition
+# "Jin Yong Qun Xia Chuan" Reissue Edition (English Version)
 <img src='https://raw.githubusercontent.com/scarsty/kys-pascal/master/open.png' />
 
 <img src='https://raw.githubusercontent.com/scarsty/kys-pascal/master/2.png' />
