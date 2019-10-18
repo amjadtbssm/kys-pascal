@@ -1,4 +1,7 @@
 # "Jin Yong Qun Xia Chuan" Reissue Edition (English Version)
+
+This fork was made to study the code behind the Kys-Pascal and learn more about the SDL Programming. Game would be translated to English so that everybody can enjoy this nice RPG game.
+
 <img src='https://raw.githubusercontent.com/scarsty/kys-pascal/master/open.png' />
 
 <img src='https://raw.githubusercontent.com/scarsty/kys-pascal/master/2.png' />
